@@ -1,52 +1,57 @@
-#one argument per line 
-#Enviromental setting
---buildver hg19 \ 
---resource ./resources \  
+#one argument per line
+#I.Environmental setting
+--buildver hg19 \ \ #line 1
+--nt 4 \ \ #line 2
+#--no-lib-check \ #line 3
+#--no-resource-check \ \ #line 4
 
-#Specify the input files
---vcf-file examples/rare.disease.hg19.vcf \ 
---ped-file examples/rare.disease.ped.txt  \ 
+#II. Specify the input files
+--vcf-file examples/rare.disease.hg19.vcf \ #line 5
+--ped-file examples/rare.disease.ped.txt \ #line 6, or specify --indiv-pheno X:1,Y:1,Z:2
 
+#III. Output setting
+--out ./test1 \ #line 7
+--excel \ #line 8
+--o-vcf \ #line 10
+#--o-flanking-seq 50 \ #line 11, need large RAM memory
 
-#Output setting
---out ./test0808_1 \ 
---excel \ 
---o-seattleseq \  
---o-vcf \  
-#--o-flanking-seq 50 \ 
+#IV. QC
+--gty-qual 10 \ #line 12
+--gty-dp 4 \ #line 13
+--gty-af-ref 0.05 \ #line 14
+--gty-af-het 0.25 \ #line 15
+--vcf-filter-in PASS,VQSRTrancheSNP90.00to93.00,VQSRTrancheSNP93.00to95.00,VQSRTrancheSNP95.00to97.00,VQSRTrancheSNP97.00to99.00 \ #line 16
+--seq-qual 50 \ #line 17
+--seq-mq 20 \ #line 18
+--seq-fs 60 \ #line 19
+--min-obsa 1 \ #line 20
+#V. Filtering
  
-#QC
---gty-qual 10 \ 
---gty-dp 4 \  
---gty-af-ref 0.05 \  
---gty-af-alt 0.25 \  
---vcf-filter-in PASS \  
---seq-qual 50 \ 
---seq-mq 20 \ 
---seq-sb 0 \ 
---min-obsa 1 \ 
---min-obsu 1 \ 
+--genotype-filter 1,2,6 \ #line 22 for recessive mode
+#--ibs-case-filter 1000 \ #line 23, or specify 'ibdregions.txt' file
+--regions-out chrX,chrY \ #line 22
+--db-filter 1kg201204,dbsnp141,ESP6500AA,ESP6500EA \ #line 26
+--rare-allele-freq 0.006 \ #line 27
+--db-filter-hard dbsnp138nf \ #line 27
+--db-gene refgene,gencode,knowngene \ #line 24
+--gene-feature-in 0,1,2,3,4,5,6 \ #line 25
+--superdup-filter \
+--gene-var-filter 4
 
- #Filtering and Prioritization 
---genotype-filter 3,4,5,6  \ 
---ibs-case-filter 1000 \ 
---db-gene refgene \ 
---gene-feature-in 0,1,2,3,4,5 \ 
+#VI. Annotation 
+--scsnv-annot \#line 31
+--dgv-cnv-annot --candi-list ECEL1,MYBPC1,TNNI2,TNNT3,TPM2 \#line 31
+--geneset-annot cura \ #line 33
+--ppi-annot string \ #line 34
+--ppi-depth 1 \ #line 35
+--phenotype-term Arthrogryposis,Arthrogryposis+multiplex+congenita \ #line 35
+--pubmed-mining
 
---db-filter hg19_1kg201204,hg19_dbsnp137,hg19_ESP6500AA,hg19_ESP6500EA \ 
---db-filter-hard dbsnp138nf
---rare-allele-freq 0.006 \ 
---db-score dbnsfp \ 
---filter-nondisease-variant \
---regions-out chrX,chrY \ 
+#VII. Prediction at variants 
+--db-score dbnsfp \ #line 28 
+--mendel-causing-predict all
+--filter-nondisease-variant \ #line 29
 
-#Annotation
---genome-anot \  
---candi-list ECEL1,MYBPC1,TNNI2,TNNT3,TPM2 \ 
---pubmed-mining Arthrogryposis,Arthrogryposis+multiplex+congenita \ 
-
---pathway-annot cura \  
---ppi-annot string \
---ppi-depth 1 \  
-
- 
+#VIII. Prediction at genes 
+--patho-gene-predict 
+#--phenolyzer-prediction
